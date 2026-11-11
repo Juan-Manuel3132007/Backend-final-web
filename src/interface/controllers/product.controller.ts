@@ -23,7 +23,11 @@ export class ProductController {
 
   update = async (req: Request, res: Response): Promise<void> => {
     const { id } = idParamSchema.parse(req.params);
-    const product = await this.products.update(id, productBodySchema.parse(req.body ?? {}), getImageFile(req));
+    const product = await this.products.update(
+      id,
+      productBodySchema.parse(req.body ?? {}),
+      getImageFile(req),
+    );
     res.status(200).json({ data: product });
   };
 

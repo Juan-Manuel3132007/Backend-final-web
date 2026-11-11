@@ -2,7 +2,9 @@ import { z } from "zod";
 import { PLATFORMS } from "../../domain/models/product";
 import { emptyToUndefined, pageQuerySchema } from "./common.dto";
 
-const platformSchema = z.enum(PLATFORMS, { error: `La plataforma debe ser una de: ${PLATFORMS.join(", ")}.` });
+const platformSchema = z.enum(PLATFORMS, {
+  error: `La plataforma debe ser una de: ${PLATFORMS.join(", ")}.`,
+});
 
 /** Llega como multipart/form-data, así que los números vienen como texto y se convierten. */
 export const productBodySchema = z.object({
@@ -40,10 +42,16 @@ export const productQuerySchema = pageQuerySchema.extend({
   platform: z.preprocess(emptyToUndefined, platformSchema.optional()),
   minPrice: z.preprocess(
     emptyToUndefined,
-    z.coerce.number({ error: "minPrice debe ser un número." }).min(0, "minPrice no puede ser negativo.").optional(),
+    z.coerce
+      .number({ error: "minPrice debe ser un número." })
+      .min(0, "minPrice no puede ser negativo.")
+      .optional(),
   ),
   maxPrice: z.preprocess(
     emptyToUndefined,
-    z.coerce.number({ error: "maxPrice debe ser un número." }).min(0, "maxPrice no puede ser negativo.").optional(),
+    z.coerce
+      .number({ error: "maxPrice debe ser un número." })
+      .min(0, "maxPrice no puede ser negativo.")
+      .optional(),
   ),
 });

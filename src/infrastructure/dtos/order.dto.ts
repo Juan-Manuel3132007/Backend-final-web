@@ -2,10 +2,15 @@ import { z } from "zod";
 import { ORDER_STATUSES } from "../../domain/models/order";
 import { emptyToUndefined, pageQuerySchema } from "./common.dto";
 
-const statusSchema = z.enum(ORDER_STATUSES, { error: `El estado debe ser uno de: ${ORDER_STATUSES.join(", ")}.` });
+const statusSchema = z.enum(ORDER_STATUSES, {
+  error: `El estado debe ser uno de: ${ORDER_STATUSES.join(", ")}.`,
+});
 
 const itemSchema = z.object({
-  productId: z.coerce.number({ error: "productId debe ser un número." }).int().positive("productId no es válido."),
+  productId: z.coerce
+    .number({ error: "productId debe ser un número." })
+    .int()
+    .positive("productId no es válido."),
   quantity: z.coerce
     .number({ error: "La cantidad debe ser un número." })
     .int("La cantidad debe ser un número entero.")
@@ -29,7 +34,11 @@ export const createOrderSchema = z
     const items =
       body.items ?? (body.productId ? [{ productId: body.productId, quantity: body.quantity ?? 1 }] : []);
     if (items.length === 0) {
-      ctx.addIssue({ code: "custom", path: ["items"], message: "El pedido debe tener al menos un producto." });
+      ctx.addIssue({
+        code: "custom",
+        path: ["items"],
+        message: "El pedido debe tener al menos un producto.",
+      });
       return z.NEVER;
     }
     return { shippingAddress: body.shippingAddress, items };

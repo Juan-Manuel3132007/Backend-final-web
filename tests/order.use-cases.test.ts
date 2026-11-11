@@ -14,7 +14,10 @@ describe("OrderUseCases", () => {
 
   beforeEach(() => {
     products = new InMemoryProductRepository();
-    products.rows.push(makeProduct({ id: 1, price: 100000, stock: 5 }), makeProduct({ id: 2, price: 25000.5, stock: 2 }));
+    products.rows.push(
+      makeProduct({ id: 1, price: 100000, stock: 5 }),
+      makeProduct({ id: 2, price: 25000.5, stock: 2 }),
+    );
     orders = new OrderUseCases(new InMemoryOrderRepository(products), products);
   });
 
@@ -51,7 +54,10 @@ describe("OrderUseCases", () => {
 
   it("un usuario solo ve sus pedidos; el admin ve todos", async () => {
     await orders.create(customer, { shippingAddress: "Calle 1", items: [{ productId: 1, quantity: 1 }] });
-    await orders.create(otherCustomer, { shippingAddress: "Calle 2", items: [{ productId: 1, quantity: 1 }] });
+    await orders.create(otherCustomer, {
+      shippingAddress: "Calle 2",
+      items: [{ productId: 1, quantity: 1 }],
+    });
 
     const mine = await orders.list(customer, { page: 1, limit: 10 });
     const all = await orders.list(admin, { page: 1, limit: 10 });
@@ -61,12 +67,18 @@ describe("OrderUseCases", () => {
   });
 
   it("no deja ver ni cancelar el pedido de otro usuario (403)", async () => {
-    const order = await orders.create(customer, { shippingAddress: "Calle 1", items: [{ productId: 1, quantity: 1 }] });
+    const order = await orders.create(customer, {
+      shippingAddress: "Calle 1",
+      items: [{ productId: 1, quantity: 1 }],
+    });
     await assert.rejects(orders.cancel(otherCustomer, order.id), { statusCode: 403 });
   });
 
   it("cancelar es un borrado lógico que devuelve el stock", async () => {
-    const order = await orders.create(customer, { shippingAddress: "Calle 1", items: [{ productId: 1, quantity: 2 }] });
+    const order = await orders.create(customer, {
+      shippingAddress: "Calle 1",
+      items: [{ productId: 1, quantity: 2 }],
+    });
     const cancelled = await orders.cancel(customer, order.id);
 
     assert.equal(cancelled.status, "CANCELLED");
@@ -75,7 +87,10 @@ describe("OrderUseCases", () => {
   });
 
   it("el usuario no puede cancelar un pedido que ya fue enviado", async () => {
-    const order = await orders.create(customer, { shippingAddress: "Calle 1", items: [{ productId: 1, quantity: 1 }] });
+    const order = await orders.create(customer, {
+      shippingAddress: "Calle 1",
+      items: [{ productId: 1, quantity: 1 }],
+    });
     await orders.updateStatus(admin, order.id, "SHIPPED");
     await assert.rejects(orders.cancel(customer, order.id), { statusCode: 409 });
   });

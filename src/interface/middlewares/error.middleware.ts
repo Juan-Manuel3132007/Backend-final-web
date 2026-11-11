@@ -12,7 +12,10 @@ interface ErrorResponse {
 }
 
 function fromZod(error: ZodError): ErrorResponse {
-  const errors = error.issues.map((issue) => ({ field: issue.path.join(".") || "body", message: issue.message }));
+  const errors = error.issues.map((issue) => ({
+    field: issue.path.join(".") || "body",
+    message: issue.message,
+  }));
   return { status: 400, message: "Datos inválidos.", errors };
 }
 
@@ -50,7 +53,8 @@ function toResponse(error: unknown): ErrorResponse {
     return { status: 400, message: "Los datos enviados no son válidos." };
   }
   if (error instanceof MulterError) return fromMulter(error);
-  if (isJsonSyntaxError(error)) return { status: 400, message: "El cuerpo de la petición no es un JSON válido." };
+  if (isJsonSyntaxError(error))
+    return { status: 400, message: "El cuerpo de la petición no es un JSON válido." };
   return { status: 500, message: "Error interno del servidor." };
 }
 

@@ -41,9 +41,16 @@ describe("API HTTP", () => {
       authController: new AuthController(new AuthUseCases(users, hasher, tokenService)),
       categoryController: new CategoryController(new CategoryUseCases(categories)),
       productController: new ProductController(new ProductUseCases(products, categories, storage)),
-      orderController: new OrderController(new OrderUseCases(new InMemoryOrderRepository(products), products)),
+      orderController: new OrderController(
+        new OrderUseCases(new InMemoryOrderRepository(products), products),
+      ),
     };
-    await users.create({ name: "Admin", email: "admin@test.com", passwordHash: "hashed:Admin123!", role: "ADMIN" });
+    await users.create({
+      name: "Admin",
+      email: "admin@test.com",
+      passwordHash: "hashed:Admin123!",
+      role: "ADMIN",
+    });
     await categories.create({ name: "Videojuegos", description: null });
     adminToken = tokenService.sign({ id: 1, role: "ADMIN" });
 

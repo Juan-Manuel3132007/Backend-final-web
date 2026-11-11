@@ -3,7 +3,9 @@ import "dotenv/config";
 function required(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new Error(`Falta la variable de entorno ${name}. Revisa tu archivo .env (usa .env.example como guía).`);
+    throw new Error(
+      `Falta la variable de entorno ${name}. Revisa tu archivo .env (usa .env.example como guía).`,
+    );
   }
   return value;
 }

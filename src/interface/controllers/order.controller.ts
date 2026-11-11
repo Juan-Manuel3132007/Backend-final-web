@@ -1,7 +1,11 @@
 import type { Request, Response } from "express";
 import type { OrderUseCases } from "../../application/use-cases/order.use-cases";
 import { idParamSchema } from "../../infrastructure/dtos/common.dto";
-import { createOrderSchema, orderQuerySchema, updateOrderStatusSchema } from "../../infrastructure/dtos/order.dto";
+import {
+  createOrderSchema,
+  orderQuerySchema,
+  updateOrderStatusSchema,
+} from "../../infrastructure/dtos/order.dto";
 import { getAuthUser } from "../middlewares/auth.middleware";
 
 export class OrderController {

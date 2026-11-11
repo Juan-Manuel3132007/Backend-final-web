@@ -43,8 +43,12 @@ describe("AuthUseCases", () => {
   it("responde 401 con el mismo mensaje si falla el correo o la contraseña", async () => {
     await auth.register({ name: "Ana", email: "ana@test.com", password: "Secreta123" });
 
-    const wrongPassword = await auth.login({ email: "ana@test.com", password: "mala" }).catch((error) => error);
-    const wrongEmail = await auth.login({ email: "nadie@test.com", password: "Secreta123" }).catch((error) => error);
+    const wrongPassword = await auth
+      .login({ email: "ana@test.com", password: "mala" })
+      .catch((error) => error);
+    const wrongEmail = await auth
+      .login({ email: "nadie@test.com", password: "Secreta123" })
+      .catch((error) => error);
 
     assert.equal(wrongPassword.statusCode, 401);
     assert.equal(wrongEmail.statusCode, 401);

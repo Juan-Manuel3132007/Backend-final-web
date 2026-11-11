@@ -116,7 +116,13 @@ export class InMemoryProductRepository implements ProductRepository {
   }
   async create(data: ProductData & { imageUrl: string | null }): Promise<Product> {
     const now = new Date();
-    const row: Product = { id: this.rows.length + 1, ...data, isActive: true, createdAt: now, updatedAt: now };
+    const row: Product = {
+      id: this.rows.length + 1,
+      ...data,
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    };
     this.rows.push(row);
     return row;
   }
